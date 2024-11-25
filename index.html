@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed Diaa Portfolio</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Colors */
+        :root {
+            --dark-navy: #1B1F3B;
+            --soft-white: #F8F9FA;
+            --cyan: #00ADB5;
+            --coral-red: #FF6F61;
+        }
+
+        /* Sidenav */
+        .sidenav {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: var(--dark-navy);
+            color: var(--soft-white);
+            transition: left 0.5s ease, box-shadow 0.5s ease;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0);
+        }
+
+        .sidenav.active {
+            left: 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidenav .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px; /* Ensure it's inside the sidenav */
+            cursor: pointer;
+            font-size: 1.8rem; /* Adjusted to look proportional */
+            color: var(--soft-white);
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .sidenav a {
+            text-decoration: none;
+            color: var(--soft-white);
+            margin: 15px 0;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: var(--cyan);
+        }
+
+        /* Hamburger Icon */
+        .hamburger {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 30px;
+            height: 4px;
+            background-color: var(--soft-white);
+            transition: all 0.5s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Parallax Section */
+        .parallax {
+            height: 100vh;
+            background: url(pbg.jpg) no-repeat;
+            background-size:cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            transition: transform 0.5s ease;
+        }
+
+        .landing-content {
+            text-align: center;
+            color: white;
+        }
+
+        .landing-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .circle-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--dark-navy);
+            margin: 0 auto;
+        }
+
+        .circle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 50px 20px;
+            background-color: rgb(117, 117, 212);
+            color: var(--dark-navy);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .about-section .text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .about-section .text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-section .image-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid var(--dark-navy);
+        }
+
+        .about-section .image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Page Shift on Sidenav */
+        body.active .parallax,
+        body.active .about-section {
+            transform: translateX(250px);
+        }
+        /* For most modern browsers */
+/* Hide scrollbar but allow scrolling */
+html, body {
+    overflow: auto; /* Enable scrolling */
+    height: 100%; /* Ensure the body takes full height */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none; /* For Firefox */
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    width: 0; /* For Chrome, Safari, and Edge */
+    height: 0; /* For horizontal scrollbars */
+}
+/* Languages Section */
+.languages-section {
+    padding: 50px 20px;
+    background-color: var(--soft-white);
+    color: var(--dark-navy);
+    text-align: center;
+}
+
+.languages-section h2 {
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: space-between; /* Align cards horizontally */
+    flex-wrap: wrap; /* Wrap cards if they don't fit in one row */
+    gap: 20px; /* Add space between cards */
+}
+
+.card {
+    flex: 1;
+    max-width: 18%;
+    background-color: var(--soft-white);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    opacity: 0; /* Hidden initially */
+    transform: translateX(100%); /* Positioned off-screen on the right */
+    transition: opacity 0.3s ease, transform 0.8s ease;
+}
+.card.visible {
+    opacity: 1;
+    transform: translateX(0); /* Move into view */
+}
+.card img {
+    width: 100%;
+    height: auto; /* Adjust height dynamically */
+    object-fit: contain; /* Ensure the whole image is visible */
+    transition: opacity 0.3s ease;
+}
+
+.card .info {
+    text-align: center;
+    padding: 15px;
+    opacity: 0;
+    transform: translateY(20px); /* Smooth hover effect */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card h3 {
+    font-size: 1.2rem; /* Adjusted for better readability */
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 5px;
+}
+
+/* h4 adjusted */
+.card h4 {
+    margin-top: auto; /* Push h4 to the bottom dynamically */
+    text-align: center;
+    font-size: 1rem;
+    color: var(--cyan);
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease;
+}
+
+/* Hover Effects */
+.card:hover img {
+    opacity: 0.5; /* Slight dimming effect */
+}
+
+.card:hover .info {
+    transform: translateY(0); /* Bring up the info */
+    opacity: 1;
+}
+.card:hover {
+    transform: scale(1.05); /* Slight enlargement */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover h4 {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--coral-red);
+}
+.cardimg{
+  margin-top:100px;
+}
+/* Cards shift and shrink when sidenav is active */
+body.active .card {
+    transform: scale(0.9) translateX(20px);
+    transition: transform 0.3s ease;
+}
+
+/* Card animation */
+.card {
+    flex: 1;
+    max-width: 18%;
+    background-color: var(--soft-white);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    opacity: 0; /* Hidden initially */
+    transform: translateX(100%); /* Positioned off-screen on the right */
+    transition: opacity 0.3s ease, transform 0.8s ease;
+    transform: scale(0.8); /* Start smaller */
+    opacity: 0; /* Hidden initially */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card.visible {
+  transform: scale(1); /* Expand to full size when visible */
+  opacity: 1;
+
+}
+/* Move the main content to the right when sidenav is active */
+body.active .parallax,
+body.active .about-section,
+body.active .languages-section,
+body.active .cards-container {
+    transform: translateX(250px); /* Adjust the shift value to match sidenav width */
+    transition: transform 0.5s ease; /* Smooth transition */
+}
+
+/* Prevent overlap by pushing the hamburger */
+body.active .hamburger {
+    transform: translateX(250px);
+    transition: transform 0.5s ease;
+}
+/* Certifications Section */
+.certifications-section {
+    padding: 50px 20px;
+    background-color: var(--soft-white);
+    text-align: center;
+    color: var(--dark-navy);
+}
+
+.certifications-section h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: var(--cyan);
+}
+
+.certifications-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center-aligns all rows */
+    gap: 20px; /* Space between boxes */
+}
+
+.cert-box {
+    width: 30%; /* All boxes are the same size, 3 per row */
+    aspect-ratio: 4 / 3; /* Maintains a 4:3 ratio for the boxes */
+    background-color: var(--dark-navy);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(20px); /* Downward offset for animation */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.cert-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the box proportionally */
+}
+
+/* Push to the side when sidenav is active */
+body.active .cert-box {
+    transform: translateX(250px);
+}
+
+/* Visible animation */
+.cert-box.visible {
+    transform: translateY(0); /* Resets to original position */
+    opacity: 1;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Sidenav -->
+    <div class="sidenav">
+        <button class="close-btn">&times;</button>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a href="#resume">Resume</a>
+    </div>
+
+    <!-- Hamburger Icon -->
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Parallax Section -->
+    <section id="home" class="parallax">
+        <div class="landing-content">
+            <h1>Hello, my name is Mohamed Diaa</h1>
+            <div class="circle-image"><img src="pimage.jpg" alt="Profile Picture"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="text">
+            <h2>About Me</h2>
+            <p>My name is Mohamed Diaa, I am a junior frontend developer who also knows a thing or two about UI/UX and is certified in them. <br>
+              I am 13 years of age, i specialize in HTML, CSS, JS, Bootstrap and React. <br>
+            At this date, i have earned 7 certifications from IBM on coursera, which will be listed below <br>
+            I am a student of 7th grade at MLS. back in 4th and 5th grade I participated in this little <br>
+            thing called challenge of the pharohs that our school. In my time, I didn't do anything significant <br>
+            in there but i learned
+        </div>
+        <div class="image-frame">
+            <img src="fillerimage.jpg" alt="About Me Image">
+        </div>
+    </section>
+<!-- Languages Section -->
+<section id="languages" class="languages-section">
+  <h2>Languages I've Learned</h2>
+  <div class="cards-container">
+      <div class="card">
+          <img src="html.png" alt="HTML" class="cardimg">
+          <div class="info">
+              <h3>HTML</h3>
+              <p>HTML is the backbone of all web pages, structuring the content on the internet.</p>
+          </div>
+          <h4>Markup Language</h4>
+      </div>
+      <div class="card">
+          <img src="css.png" alt="CSS" class="cardimg">
+          <div class="info">
+              <h3>CSS</h3>
+              <p>CSS styles and beautifies web pages, enhancing user experience and design.</p>
+          </div>
+          <h4>Styling Language</h4>
+      </div>
+      <div class="card">
+          <img src="Javascript.png.png" alt="JavaScript" class="cardimg">
+          <div class="info">
+              <h3>JavaScript</h3>
+              <p>JavaScript adds interactivity to websites, making them dynamic and responsive.</p>
+          </div>
+          <h4>Scripting Language</h4>
+      </div>
+      <div class="card">
+          <img src="bootstrap.png" alt="Bootstrap" class="cardimg">
+          <div class="info">
+              <h3>Bootstrap</h3>
+              <p>Bootstrap is a CSS framework that makes it easy to build responsive designs.</p>
+          </div>
+          <h4>Framework</h4>
+      </div>
+      <div class="card">
+          <img src="react.png" alt="React" class="cardimg">
+          <div class="info">
+              <h3>React</h3>
+              <p>React is a JavaScript library for building user interfaces efficiently.</p>
+          </div>
+          <h4>JavaScript Library</h4>
+      </div>
+  </div>
+</section>
+  <!-- Certifications Section -->
+<!-- Certifications Section -->
+<section id="certifications" class="certifications-section">
+  <h1>Certifications</h1>
+  <div class="certifications-container">
+      <!-- Certification Boxes -->
+      <div class="cert-box">
+          <img src="cert1.jpg" alt="Certification 1">
+      </div>
+      <div class="cert-box">
+          <img src="cert2.jpg" alt="Certification 2">
+      </div>
+      <div class="cert-box">
+          <img src="cert3.jpg" alt="Certification 3">
+      </div>
+      <div class="cert-box">
+          <img src="cert4.jpg" alt="Certification 4">
+      </div>
+      <div class="cert-box">
+          <img src="cert5.jpg" alt="Certification 5">
+      </div>
+      <div class="cert-box">
+          <img src="cert6.jpg" alt="Certification 6">
+      </div>
+      <div class="cert-box">
+          <img src="cert7.jpg" alt="Certification 7">
+      </div>
+  </div>
+</section>
+
+
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector('.hamburger');
+    const sidenav = document.querySelector('.sidenav');
+    const closeBtn = document.querySelector('.close-btn');
+    const body = document.body;
+
+    // Sidenav toggle behavior
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.add('active');
+        sidenav.classList.add('active');
+        body.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        sidenav.classList.remove('active');
+        body.classList.remove('active');
+    });
+
+    // Scroll animation for About Section
+    const textElement = document.querySelector(".about-section .text");
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    textElement.classList.add("active");
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
+    observer.observe(textElement);
+
+    // Scroll animation for Cards
+    const cards = document.querySelectorAll(".card");
+    const cardObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add("visible");
+                    }, index * 200); // Add delay for "bead" effect
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
+    cards.forEach(card => cardObserver.observe(card));
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector('.hamburger');
+    const sidenav = document.querySelector('.sidenav');
+    const closeBtn = document.querySelector('.close-btn');
+    const body = document.body;
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.add('active');
+        sidenav.classList.add('active');
+        body.classList.add('active'); // Add this class to move content
+    });
+
+    closeBtn.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        sidenav.classList.remove('active');
+        body.classList.remove('active'); // Remove this class to reset content position
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const certBoxes = document.querySelectorAll(".cert-box");
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add("visible");
+                    }, index * 150); // Delay effect for each box
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
+
+    certBoxes.forEach(box => observer.observe(box));
+});
+
+    </script>
+</body>
+</html>
